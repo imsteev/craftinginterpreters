@@ -19,7 +19,7 @@ enum TokenType {
     BANG_EQUAL,
     EQUAL,
     EQUAL_EQUAL,
-    GRATER,
+    GREATER,
     GREATER_EQUAL,
     LESS,
     LESS_EQUAL,

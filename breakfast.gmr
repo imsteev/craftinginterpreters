@@ -1,0 +1,29 @@
+// Example context-free grammar that demonstrates how rules can be
+// expressed in a way that produces arbitrary "sentences".
+
+breakfast -> protein "with" breakfast "on the side" ;
+breakfast -> protein ;
+breakfast -> bread ;
+
+protein -> crispiness "crispy" "bacon" ;
+protein -> "sausage" ;
+protein -> cooked "eggs" ;
+
+crispiness -> "really";
+crispiness -> "really" crispiness ;
+
+cooked -> "scrambled" ;
+cooked -> "sunny side" ;
+cooked -> "poached" ;
+
+bread -> "toast" ;
+bread -> "poached" ;
+bread -> "English muffin" ;
+
+---
+
+breakfast -> protein ( "with" breakfast "on the side" )? | bread ;
+
+protein -> "really"+ "crispy" "bacon" | "sausage" | ( "scrambled" | "poached" | "fried" ) "eggs";
+
+bread -> "toast" | "biscuits" | "English muffin" ;

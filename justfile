@@ -9,3 +9,7 @@ print:
 repl:
     javac com/craftinginterpreters/lox/Lox.java
     java com.craftinginterpreters.lox.Lox
+
+run file:
+    javac com/craftinginterpreters/lox/Lox.java
+    java com.craftinginterpreters.lox.Lox {{file}}

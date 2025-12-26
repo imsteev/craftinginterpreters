@@ -12,6 +12,8 @@ public class GenerateAst {
             System.exit(64);
         }
         String outputDir = args[0];
+
+        // Expressions produce values.
         defineAst(outputDir, "Expr", Arrays.asList(
             "Assign    : Token name, Expr value",
             "Binary    : Expr left, Token operator, Expr right",
@@ -21,10 +23,12 @@ public class GenerateAst {
             "Unary     : Token operator, Expr right"
         ));
 
+        // Statements produce side-effects.
         defineAst(outputDir, "Stmt", Arrays.asList(
             "Expression : Expr expression",
             "Print      : Expr expression",
-            "Var        : Token name, Expr initializer"
+            "Var        : Token name, Expr initializer",
+            "Block      : List<Stmt> statements"
         ));
     }
 

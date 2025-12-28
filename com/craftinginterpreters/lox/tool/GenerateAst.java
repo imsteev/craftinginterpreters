@@ -21,12 +21,14 @@ public class GenerateAst {
             "Literal   : Object value",
             "Variable  : Token name",
             "Unary     : Token operator, Expr right",
-            "Logical   : Expr left, Token operator, Expr right"
+            "Logical   : Expr left, Token operator, Expr right",
+            "Call      : Expr callee, Token paren, List<Expr> arguments"
         ));
 
         // Statements produce side-effects.
         defineAst(outputDir, "Stmt", Arrays.asList(
             "Expression : Expr expression",
+            "Function   : Token name, List<Token> params," + " List<Stmt> body",
             "Print      : Expr expression",
             "Var        : Token name, Expr initializer",
             "Block      : List<Stmt> statements",

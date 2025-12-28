@@ -44,6 +44,7 @@ public class Parser {
         if (match(FOR)) return forStatement();
         if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
+        if (match(RETURN)) return returnStatement();
         if (match(WHILE)) return whileStatement();
         if (match(LEFT_BRACE)) return new Stmt.Block(block());
 
@@ -128,6 +129,36 @@ public class Parser {
 
         consume(SEMICOLON, "Expect ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
+    }
+
+    // Call stack would look roughly like:
+    //
+    // fun count(n) {
+    //     while (n < 100) {
+    //         if (n == 3) return n; // <--
+    //         print n;
+    //         n = n + 1;
+    //     }
+    // }
+
+    // Interpreter.visitReturnStmt();
+    // Interpreter.visitIfStmt();
+    // Interpreter.executeBlock();
+    // Interpreter.visitBlockStmt();
+    // Interpreter.visitWhileStmt();
+    // Interpreter.executeBlock();
+    // Interpreter.call();
+    // Interpreter.visitCallExpr();
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+
+        consume(SEMICOLON, "Expect ';' after return value.");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt whileStatement() {

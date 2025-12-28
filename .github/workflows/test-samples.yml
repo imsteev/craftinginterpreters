@@ -1,0 +1,43 @@
+name: Test Sample Scripts
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test-samples:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Compile Lox interpreter
+      run: javac com/craftinginterpreters/lox/Lox.java
+      
+    - name: Run all sample scripts
+      run: |
+        echo "Running sample scripts..."
+        for script in samples/*.lox; do
+          echo "=========================================="
+          echo "Running: $script"
+          echo "=========================================="
+          java com.craftinginterpreters.lox.Lox "$script"
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            echo "ERROR: $script failed with exit code $exit_code"
+            exit 1
+          fi
+          echo ""
+        done
+        echo "All sample scripts completed successfully!"
+

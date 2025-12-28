@@ -20,7 +20,8 @@ public class GenerateAst {
             "Grouping  : Expr expression",
             "Literal   : Object value",
             "Variable  : Token name",
-            "Unary     : Token operator, Expr right"
+            "Unary     : Token operator, Expr right",
+            "Logical   : Expr left, Token operator, Expr right"
         ));
 
         // Statements produce side-effects.
@@ -29,7 +30,8 @@ public class GenerateAst {
             "Print      : Expr expression",
             "Var        : Token name, Expr initializer",
             "Block      : List<Stmt> statements",
-            "If         : Expr condition, Stmt thenBranch, Stmt elseBranch"
+            "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
+            "While      : Expr condition, Stmt body"
         ));
     }
 

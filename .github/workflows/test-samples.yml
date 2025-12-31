@@ -25,8 +25,9 @@ jobs:
       run: javac com/craftinginterpreters/lox/Lox.java
 
     - name: Run all sample scripts
+      shell: bash
       run: |
-        #!/bin/bash
+        set +e  # Don't exit on error - we handle errors ourselves
 
         # ANSI color codes
         GREEN='\033[0;32m'
@@ -71,11 +72,11 @@ jobs:
             # Run the script and capture output
             if output=$(java com.craftinginterpreters.lox.Lox "$script" 2>&1); then
               echo -e "${GREEN}✓ PASS${NC}"
-              ((passed++))
+              passed=$((passed + 1))
             else
               echo -e "${RED}✗ FAIL${NC}"
               echo -e "    ${RED}Error: $output${NC}"
-              ((failed++))
+              failed=$((failed + 1))
               failed_scripts+=("$script")
             fi
           done

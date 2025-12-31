@@ -22,22 +22,26 @@ public class GenerateAst {
             "Variable  : Token name",
             "Unary     : Token operator, Expr right",
             "Logical   : Expr left, Token operator, Expr right",
-            "Call      : Expr callee, Token paren, List<Expr> arguments"
+            "Call      : Expr callee, Token paren, List<Expr> arguments",
+            "Get       : Expr object, Token name",
+            "Set       : Expr object, Token name, Expr value"
         ));
 
         // Statements produce side-effects.
         defineAst(outputDir, "Stmt", Arrays.asList(
             "Expression : Expr expression",
-            "Function   : Token name, List<Token> params," + " List<Stmt> body",
+            "Function   : Token name, List<Token> params, List<Stmt> body",
             "Print      : Expr expression",
             "Var        : Token name, Expr initializer",
             "Block      : List<Stmt> statements",
             "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
             "While      : Expr condition, Stmt body",
-            "Return     : Token keyword, Expr value"
+            "Return     : Token keyword, Expr value",
+            "Class      : Token name, List<Stmt.Function> methods"
         ));
     }
 
+    // Effectively, this creates an AST node called {baseName}, and types is the set of fields it encapsulates.
     private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
         String path = outputDir + "/" + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, "UTF-8");

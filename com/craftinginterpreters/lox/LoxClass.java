@@ -39,6 +39,6 @@ public class LoxClass implements LoxCallable {
    public int arity() {
       LoxFunction initializer = findMethod("init");
       if (initializer == null) return 0;
-      return 0;
+      return initializer.arity();
    }
 }

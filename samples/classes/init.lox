@@ -1,0 +1,13 @@
+class Animal {
+    init(sound) {
+        this.sound = sound;
+    }
+
+    speak() {
+        print this.sound;
+    }
+}
+
+var d = Animal("woof");
+d.speak();
+

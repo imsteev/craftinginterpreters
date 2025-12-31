@@ -7,9 +7,9 @@ print:
     java com.craftinginterpreters.lox.AstPrinter com/craftinginterpreters/lox
 
 repl:
-    javac com/craftinginterpreters/lox/Lox.java
+    javac com/craftinginterpreters/lox/*.java
     java com.craftinginterpreters.lox.Lox
 
 run file:
-    javac com/craftinginterpreters/lox/Lox.java
+    javac com/craftinginterpreters/lox/*.java
     java com.craftinginterpreters.lox.Lox {{file}}

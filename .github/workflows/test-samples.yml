@@ -22,7 +22,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Compile Lox interpreter
-      run: javac com/craftinginterpreters/lox/Lox.java
+      run: javac com/craftinginterpreters/lox/*.java
 
     - name: Run all sample scripts
       shell: bash
@@ -72,6 +72,9 @@ jobs:
             # Run the script and capture output
             if output=$(java com.craftinginterpreters.lox.Lox "$script" 2>&1); then
               echo -e "${GREEN}✓ PASS${NC}"
+              if [ -n "$output" ]; then
+                echo -e "    ${GREEN}Output: $output${NC}"
+              fi
               passed=$((passed + 1))
             else
               echo -e "${RED}✗ FAIL${NC}"

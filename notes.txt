@@ -1,6 +1,0 @@
-parser -> scanner -> AST -> expression
-
-expression options
-  translate to other high level language
-  translate to machine code
-  translate to byte code for a virtual machine

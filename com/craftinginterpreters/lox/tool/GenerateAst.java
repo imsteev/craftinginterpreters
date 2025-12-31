@@ -38,7 +38,7 @@ public class GenerateAst {
             "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
             "While      : Expr condition, Stmt body",
             "Return     : Token keyword, Expr value",
-            "Class      : Token name, List<Stmt.Function> methods"
+            "Class      : Token name, Expr.Variable superclass, List<Stmt.Function> methods"
         ));
     }
 

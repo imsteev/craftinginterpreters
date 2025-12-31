@@ -1,0 +1,10 @@
+class Animal {
+    speak() {
+        print this.sound;
+    }
+}
+
+var a = Animal();
+a.sound = "woof";
+a.speak();
+

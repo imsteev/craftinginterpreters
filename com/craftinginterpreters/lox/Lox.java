@@ -47,6 +47,11 @@ public class Lox {
         }
     }
 
+    // To run Lox source code, we must:
+    //      Scan tokens.
+    //      Parse AST according to grammar.
+    //      Resolve variables.
+    //      Interpret the statements of code (runtime)
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();

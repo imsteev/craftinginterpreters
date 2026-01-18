@@ -1,0 +1,14 @@
+// Fun fact: at the time of writing the author says this program takes his machine 72 seconds to run.
+// This takes my machine 18 seconds to run!
+
+fun fib(n) {
+    if (n < 2) return n;
+    return fib(n-1) + fib(n-2);
+}
+
+var before = clock();
+print fib(40);
+var after = clock();
+print after - before;
+
+

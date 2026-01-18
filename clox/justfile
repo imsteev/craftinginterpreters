@@ -1,0 +1,8 @@
+build:
+    gcc -o clox *.c
+
+run: build
+    ./clox
+
+clean:
+    rm -f clox

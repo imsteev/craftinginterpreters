@@ -1,1 +1,4 @@
 *.class
+
+# clox executable
+clox/clox

@@ -8,6 +8,7 @@
 // Each instruction has a specified format (e.g, constants must need relevant data to load correct values)
 typedef enum {
     OP_CONSTANT,
+    OP_NEGATE,
     OP_RETURN,
 } OpCode;
 

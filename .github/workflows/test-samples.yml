@@ -22,9 +22,11 @@ jobs:
         distribution: 'temurin'
 
     - name: Compile Lox interpreter
+      working-directory: jlox
       run: javac com/craftinginterpreters/lox/*.java
 
     - name: Run all sample scripts
+      working-directory: jlox
       shell: bash
       run: |
         set +e  # Don't exit on error - we handle errors ourselves
@@ -61,7 +63,7 @@ jobs:
           echo -e "${BOLD}${BLUE}└─────────────────────────────────────────────────────┘${NC}"
           echo ""
 
-          for script in samples/$category/*.lox; do
+          for script in ../samples/$category/*.lox; do
             if [ ! -f "$script" ]; then
               continue
             fi
@@ -98,15 +100,15 @@ jobs:
         }
 
         # Run tests by category
-        if [ -d "samples/basics" ]; then
+        if [ -d "../samples/basics" ]; then
           run_category "basics" "BASICS - Core Language Features"
         fi
 
-        if [ -d "samples/functions" ]; then
+        if [ -d "../samples/functions" ]; then
           run_category "functions" "FUNCTIONS - Closures & Recursion"
         fi
 
-        if [ -d "samples/classes" ]; then
+        if [ -d "../samples/classes" ]; then
           run_category "classes" "CLASSES - Object-Oriented Programming"
         fi
 

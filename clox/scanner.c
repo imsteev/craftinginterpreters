@@ -30,7 +30,7 @@ static bool isAtEnd() {
   return *scanner.current == '\0';
 }
 
-static Token makeToken(TokenType type) {
+static Token makeToken(Token type) {
   Token token;
   token.type = type;
   token.start = scanner.start;

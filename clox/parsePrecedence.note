@@ -1,0 +1,122 @@
+parsePrecedence - How It Works
+==============================
+
+The function (compiler.c:206-222):
+
+    static void parsePrecedence(Precedence precedence) {
+      advance();
+      ParseFn prefixRule = getRule(parser.previous.type)->prefix;
+      if (prefixRule == NULL) {
+        error("Expect expression.");
+        return;
+      }
+
+      prefixRule();
+
+      while (precedence <= getRule(parser.current.type)->precedence) {
+        advance();
+        ParseFn infixRule = getRule(parser.previous.type)->infix;
+        infixRule();
+      }
+    }
+
+
+The Precedence Enum (low to high)
+---------------------------------
+    PREC_NONE        = 0
+    PREC_ASSIGNMENT  = 1   // =
+    PREC_OR          = 2   // or
+    PREC_AND         = 3   // and
+    PREC_EQUALITY    = 4   // == !=
+    PREC_COMPARISON  = 5   // < > <= >=
+    PREC_TERM        = 6   // + -
+    PREC_FACTOR      = 7   // * /
+    PREC_UNARY       = 8   // ! -
+    PREC_CALL        = 9   // . ()
+    PREC_PRIMARY     = 10
+
+
+Understanding Greediness
+------------------------
+The `precedence` parameter is a FLOOR - "don't consume anything below this level."
+
+    while (precedence <= getRule(parser.current.type)->precedence)
+                 ^                                        ^
+              floor                              next token's precedence
+
+- LOW floor (PREC_ASSIGNMENT = 1) --> almost everything passes --> GREEDY
+- HIGH floor (PREC_UNARY = 8)     --> very little passes      --> NOT GREEDY
+
+
+Think of it like a bouncer at a club:
+
+    "You must be at least THIS important to get consumed"
+
+    Floor = PREC_ASSIGNMENT (1):  "Everyone come in!" (greedy)
+    Floor = PREC_FACTOR (7):      "Only * / and higher" (picky)
+    Floor = PREC_UNARY (8):       "Almost nobody" (very picky)
+
+
+Worked Example: 1 + 2 * 3
+-------------------------
+We want this to parse as: 1 + (2 * 3)
+
+1. expression() calls parsePrecedence(PREC_ASSIGNMENT)  // floor = 1
+
+2. Consume `1`, call number() -> emit 1
+
+3. Loop: is PREC_ASSIGNMENT(1) <= PREC_TERM(6)?  YES, + gets consumed
+   Call binary() for +
+
+4. binary() calls parsePrecedence(PREC_FACTOR)  // floor = 7 (TERM + 1)
+   This is LESS greedy - it won't consume + or - anymore
+
+5. Consume `2`, call number() -> emit 2
+
+6. Loop: is PREC_FACTOR(7) <= PREC_FACTOR(7)?  YES, * gets consumed
+   Call binary() for *
+
+7. binary() calls parsePrecedence(PREC_UNARY)  // floor = 8 (FACTOR + 1)
+
+8. Consume `3`, call number() -> emit 3
+
+9. Loop: is PREC_UNARY(8) <= PREC_NONE(0)?  NO, stop
+   Return from inner parsePrecedence
+
+10. Back in * binary(): emit OP_MULTIPLY
+
+11. Back in + binary(): emit OP_ADD
+
+Result: 1 2 3 * +  (correct!)
+
+
+Why +1 in binary()?
+-------------------
+    parsePrecedence((Precedence)(rule->precedence + 1));
+
+This makes operators LEFT-ASSOCIATIVE.
+
+For `1 - 2 - 3`:
+- After parsing `2`, we see another `-` (PREC_TERM = 6)
+- Our floor is PREC_TERM + 1 = 7
+- Is 7 <= 6? NO. So we DON'T consume the second `-`
+- Result: (1 - 2) - 3  (left-associative, correct!)
+
+Without +1 (for right-associative operators like =):
+- Floor would be 6
+- Is 6 <= 6? YES. We WOULD consume the second `-`
+- Result: 1 - (2 - 3)  (right-associative)
+
+
+The Mental Model
+----------------
+When you call parsePrecedence(P):
+
+    "Parse an expression, but STOP when you hit an operator
+     with precedence LESS THAN P."
+
+Low P  = stop late  = consume more = greedy
+High P = stop early = consume less = picky
+
+The while loop keeps going as long as the next operator is
+"important enough" (>= our floor) to be part of THIS expression.

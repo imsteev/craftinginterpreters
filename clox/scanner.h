@@ -58,7 +58,7 @@ typedef struct {
   int line;
 } Token;
 
-void initScanner(const char* src);
+void initScanner(const char* source);
 Token scanToken();
 
 #endif

@@ -12,9 +12,9 @@ typedef struct {
 
 Scanner scanner;
 
-void initScanner(const char* src) {
-  scanner.start = src;
-  scanner.current = src;
+void initScanner(const char* source) {
+  scanner.start = source;
+  scanner.current = source;
   scanner.line = 1;
 }
 
@@ -30,7 +30,7 @@ static bool isAtEnd() {
   return *scanner.current == '\0';
 }
 
-static TokenType makeToken(Token type) {
+static Token makeToken(TokenType type) {
   Token token;
   token.type = type;
   token.start = scanner.start;
@@ -39,7 +39,7 @@ static TokenType makeToken(Token type) {
   return token;
 }
 
-static TokenType errorToken(const char* msg) {
+static Token errorToken(const char* msg) {
   Token token;
   token.type = TOKEN_ERROR;
   token.start = msg;
@@ -62,7 +62,7 @@ static char peekNext() {
   return scanner.current[1];
 }
 
-static TokenType string() {
+static Token string() {
   while (peek() != '"' && !isAtEnd()) {
     if (peek() == '\n') scanner.line++;
     advance();
@@ -113,7 +113,7 @@ static TokenType checkKeyword(int start, int length, const char* rest, TokenType
   return TOKEN_IDENTIFIER;
 }
 
-static TokenType number() {
+static Token number() {
   while (isDigit(peek())) advance();
 
   // Look for a fractional part.
@@ -158,11 +158,11 @@ static TokenType identifierType() {
     case 'v': return checkKeyword(1, 2, "ar", TOKEN_VAR);
     case 'w': return checkKeyword(1, 4, "hile", TOKEN_WHILE);
   }
-  return makeToken(TOKEN_IDENTIFIER);
+  return TOKEN_IDENTIFIER;
 }
 
-static TokenType identifier() {
-  while (isAlpha(peek())) || isDigit(peek()) advance();
+static Token identifier() {
+  while (isAlpha(peek()) || isDigit(peek())) advance();
   return makeToken(identifierType());
 }
 
